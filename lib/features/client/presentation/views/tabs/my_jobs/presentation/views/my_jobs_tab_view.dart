@@ -13,6 +13,8 @@ import '../../../../../../../shared/domain/entities/order_entity/order_entity.da
 import '../view_model/delete_order_view_model/delete_order_states.dart';
 import '../view_model/delete_order_view_model/delete_order_view_model.dart';
 import '../view_model/get_order_view_model.dart/get_order_view_model_states.dart';
+
+
 class MyJobsTabView extends StatelessWidget {
   MyJobsTabView({super.key});
   final String userId = SharedPrefHelper.getString("id")!;
@@ -73,6 +75,8 @@ class MyJobsTabView extends StatelessWidget {
                   bottom: PreferredSize(
                     preferredSize:   Size.fromHeight(60.h),
                     child: TabBar(
+
+
                       labelColor: ColorsManager.primary,
                       unselectedLabelColor: Colors.grey,
                       labelStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
@@ -140,10 +144,14 @@ class MyJobsTabView extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Tab(
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.visible,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              title,
+              maxLines: 1,
+              overflow: TextOverflow.visible,
+              softWrap: false,
+            ),
           ),
         ),
 

@@ -170,8 +170,6 @@ class GetOffersViewModel extends Cubit<GetOffersViewModelStates> {
 
           _offers = List.from(_offers)..add(offerWithFreelancer);
 
-          // 🔥 اشعار بوجود اوفر جديد
-          getIt<OffersNotificationCubit>().newOfferArrived();
 
           if (!isClosed) _emitSortedOffers();
         }

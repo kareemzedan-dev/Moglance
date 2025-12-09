@@ -19,6 +19,8 @@ import 'core/services/firebase_notification_service.dart';
 import 'core/services/theme_notifier.dart';
 import 'core/services/user_status_service.dart';
 import 'core/utils/constants_manager.dart';
+import 'features/client/presentation/views/tabs/my_jobs/presentation/view_model/client_orders_subscription_cubit/client_orders_subscription_cubit.dart';
+import 'features/client/presentation/views/tabs/my_jobs/presentation/view_model/get_order_view_model.dart/get_order_view_model.dart';
 import 'features/client/presentation/views/tabs/my_jobs/presentation/view_model/offers_notification_cubit/offers_notification_cubit.dart';
 import 'features/messages/presentation/manager/subscribe_to_unread_messages_view_model/subscribe_to_unread_messages_view_model.dart';
 import 'features/profile/presentation/manager/profile_view_model/profile_view_model.dart';
@@ -64,10 +66,9 @@ Future<void> main() async {
             ..getUnreadMessagesStream(SharedPrefHelper.getString(StringsManager.idKey)!),
         ),
 
-        BlocProvider(
-          create: (context) => getIt<OffersNotificationCubit>(),
-        ),
-
+        BlocProvider(create: (_) => getIt<OffersNotificationCubit>()),
+        BlocProvider(create: (_) => getIt<ClientOrdersSubscriptionCubit>()),
+        BlocProvider(create: (_) => getIt<GetOrderViewModel>()),
 
         BlocProvider(
           create: (context) => getIt<ServicesViewModel>()..getServices(),
