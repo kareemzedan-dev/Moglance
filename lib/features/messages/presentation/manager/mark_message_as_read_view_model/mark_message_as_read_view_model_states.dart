@@ -1,0 +1,7 @@
+class MarkMessageAsReadViewModelStates {}
+class MarkMessageAsReadViewModelLoadingStates extends MarkMessageAsReadViewModelStates {}
+class MarkMessageAsReadViewModelSuccessStates extends MarkMessageAsReadViewModelStates {}
+class MarkMessageAsReadViewModelErrorStates extends MarkMessageAsReadViewModelStates {
+  final String errorMessage;
+  MarkMessageAsReadViewModelErrorStates(this.errorMessage);
+}
