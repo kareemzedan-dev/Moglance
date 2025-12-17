@@ -91,10 +91,22 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   Widget _buildAttachmentWidget(
       AttachmentEntity att, bool isCurrentUser, String messageId,
       {bool isTemporary = false}) {
-    final isImage = att.type.startsWith("image/");
-    final isPDF = att.type == "application/pdf";
+    final lower = (att.url ?? att.name ?? '').toLowerCase();
+
+    final isImage =
+        lower.endsWith('.jpg') ||
+            lower.endsWith('.jpeg') ||
+            lower.endsWith('.png') ||
+            lower.endsWith('.gif');
+
+    final isPDF = lower.endsWith('.pdf');
+
     final isAudio =
-        att.type.startsWith("audio/") || att.type == "application/octet-stream";
+        lower.endsWith('.mp3') ||
+            lower.endsWith('.m4a') ||
+            lower.endsWith('.wav') ||
+            lower.endsWith('.aac');
+
 
     return Stack(
       children: [
@@ -127,15 +139,17 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                       ? Icons.image
                       : isPDF
                       ? Icons.picture_as_pdf
-                      : Icons.audiotrack,
+                      : isAudio
+                  ? Icons.audiotrack
+                  : Icons.insert_drive_file, // 📄 أي ملف عادي
+
                   size: 20,
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: GestureDetector(
-                  onTap: !isAudio
-                      ? () {
+                  onTap: () async {
                     if (isImage) {
                       showDialog(
                         context: context,
@@ -145,30 +159,43 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           child: Stack(
                             children: [
                               InteractiveViewer(
-                                child: Image.network(
-                                  att.url,
-                                  fit: BoxFit.contain,
-                                ),
+                                child: Image.network(att.url, fit: BoxFit.contain),
                               ),
                               Positioned(
                                 top: 10,
                                 right: 10,
                                 child: IconButton(
-                                  icon: const Icon(Icons.close,
-                                     ),
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(),
+                                  icon: const Icon(Icons.close),
+                                  onPressed: () => Navigator.of(context).pop(),
                                 ),
                               ),
                             ],
                           ),
                         ),
                       );
-                    } else if (isPDF) {
-                      launchUrl(Uri.parse(att.url));
+                      return;
                     }
-                  }
-                      : null,
+
+                    if (isPDF) {
+                      await launchUrl(
+                        Uri.parse(att.url),
+                        mode: LaunchMode.externalApplication,
+                      );
+                      return;
+                    }
+
+                    if (isAudio) {
+                      // الصوت بيتعالج من زرار التشغيل
+                      return;
+                    }
+
+                    // ✅ أي ملف تاني (Word / Excel / ZIP)
+                    await launchUrl(
+                      Uri.parse(att.url),
+                      mode: LaunchMode.externalApplication,
+                    );
+                  },
+
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -188,7 +215,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                             ? "Image"
                             : isPDF
                             ? "PDF Document"
-                            : "Audio File",
+                            : isAudio
+                            ? "Audio File"
+                            : "File",
                         style: TextStyle(
                           fontSize: 12,
                           color: Colors.grey[600],

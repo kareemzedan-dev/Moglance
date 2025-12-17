@@ -49,9 +49,23 @@ class UploadAttachmentsViewModel
     try {
 
       final result = await FilePicker.platform.pickFiles(
-        allowMultiple: false,
+        allowMultiple: !singleFileMode,
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'png', 'pdf', 'doc', 'docx'],
+        allowedExtensions: [
+          'jpg',
+          'jpeg',
+          'png',
+          'gif',
+          'pdf',
+          'doc',
+          'docx',
+          'ppt',
+          'pptx',
+          'xls',
+          'xlsx',
+          'zip',
+          'rar',
+        ],
       );
 
       if (result != null && result.files.isNotEmpty) {

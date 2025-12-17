@@ -298,7 +298,9 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         return const Left(NetworkFailure(StringsManager.noInternetConnection));
       }
 
+      await _googleSignOutSafely();
       final account = await _googleSignIn.signIn();
+
       if (account == null) {
         return const Left(ServerFailure(StringsManager.googleLoginCancelled));
       }
@@ -326,6 +328,8 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           .maybeSingle();
 
       if (existingUser != null && existingUser['role'] != role) {
+        await _googleSignOutSafely(); // ⭐ مهم جداً
+
         return Left(
           ServerFailure(
             StringsManager.accountAlreadyRegistered,
@@ -336,6 +340,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           ),
         );
       }
+
 
       final userId = existingUser != null
           ? existingUser['id']
@@ -366,9 +371,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
         ),
       );
     } catch (e, s) {
+      await _googleSignOutSafely(); // ⭐ هنا كمان
+
       final friendly = SupabaseAuthErrorMapper.handleError(e, s);
       return Left(ServerFailure(friendly));
     }
+
+  }
+  Future<void> _googleSignOutSafely() async {
+    try {
+      await _googleSignIn.disconnect(); // يمسح الـ cached account
+      await _googleSignIn.signOut();
+    } catch (_) {}
   }
 
   // ========================= Apple Login =========================

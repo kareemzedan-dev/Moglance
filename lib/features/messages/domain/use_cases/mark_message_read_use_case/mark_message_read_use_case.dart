@@ -12,4 +12,7 @@ class MarkMessagesAsReadUseCase {
   Future<Either<Failures, void>> call(String orderId,String currentId) {
     return repository.markMessagesAsRead(orderId,currentId);
   }
+  Future<Either<Failures, void>> callAdmin(String currentId) {
+    return repository.markAdminMessagesAsRead(currentId);
+  }
 }

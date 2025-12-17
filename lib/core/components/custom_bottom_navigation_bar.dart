@@ -22,7 +22,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final String? firstTabName;
   final String? firstTabicon;
 
-  /// 🔥 الجديد هنا
+
   final bool hasJobUpdates;
 
   @override

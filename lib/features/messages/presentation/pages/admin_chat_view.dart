@@ -15,6 +15,7 @@ import '../../../attachments/presentation/manager/upload_attachments_view_model/
 import '../../../client/presentation/views/tabs/my_jobs/presentation/view_model/update_offer_status_view_model/update_offer_status_view_model.dart';
 import '../manager/chat_with_admin_view_model/chat_with_admin_view_model.dart';
 import '../manager/get_admin_messages_view_model/get_admin_messages_view_model.dart';
+import '../manager/mark_admin_message_as_read_view_model/mark_admin_message_as_read_view_model.dart';
 import '../manager/pending_messages_view_model/pending_messages_view_model.dart';
 import '../manager/send_to_admin_messages_view_model/send_to_admin_messages_view_model.dart';
 import '../manager/subscribe_to_admin_messages_view_model/subscribe_to_admin_messages_view_model.dart';
@@ -82,10 +83,13 @@ class AdminChatView extends StatelessWidget {
           ),
         ) ,
         body: SafeArea(
-          child: ChatWithAdminViewBody(
-            currentUserId: currentUserId,
+          child:BlocProvider(
+            create: (_) => getIt<MarkAdminMessageAsReadViewModel>(),
+            child: ChatWithAdminViewBody(
+              currentUserId: currentUserId,
+            ),
+          ),
 
-          )
         ),
       ),
     );

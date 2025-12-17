@@ -130,9 +130,9 @@ class Assets {
   static const String splashVideo = "${_videos}motion_vedio.mp4";
 
   // Splash images
-  static const String fishing_tool = "${_images}fishing_tool.png";
-  static const String bag = "${_images}bag.png";
-  static const String name = "${_images}name.png";
+  static const String fishing_tool = "${_images}fishing_tool.svg";
+  static const String bag = "${_images}bag.svg";
+  static const String name = "${_images}name.svg";
 
   // Icons
   static const String eye = "${_icons}eye.svg";

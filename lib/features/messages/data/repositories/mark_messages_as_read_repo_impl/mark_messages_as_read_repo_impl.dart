@@ -12,4 +12,8 @@ class MarkMessagesAsReadRepoImpl implements MarkMessagesAsReadRepo {
   Future<Either<Failures, void>> markMessagesAsRead(String orderId,String currentUserId) {
     return remoteDataSource.markMessagesAsRead(orderId, currentUserId);
   }
+  @override
+  Future<Either<Failures, void>> markAdminMessagesAsRead(String currentUserId) {
+    return remoteDataSource.markAdminMessagesAsRead(currentUserId);
+  }
 }

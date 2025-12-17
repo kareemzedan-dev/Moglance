@@ -1,4 +1,6 @@
 // chat/presentation/widgets/chat_messages_list.dart
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +16,6 @@ import 'media_message_widget.dart';
 import 'file_message_widget.dart';
 import 'voice_message_widget.dart';
 import 'text_message_bubble.dart';
-
 
 class ChatMessagesList extends StatelessWidget {
   final String currentUserId;
@@ -37,7 +38,9 @@ class ChatMessagesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<PendingMessagesViewModel>(
       builder: (context, pendingMessagesVM, child) {
-        print('🔄 إعادة بناء ChatMessagesList - الرسائل المؤقتة: ${pendingMessagesVM.pendingMessages.length}');
+        print(
+          '🔄 إعادة بناء ChatMessagesList - الرسائل المؤقتة: ${pendingMessagesVM.pendingMessages.length}',
+        );
 
         return BlocBuilder<GetMessagesViewModel, GetMessagesViewModelStates>(
           builder: (context, oldState) {
@@ -50,7 +53,10 @@ class ChatMessagesList extends StatelessWidget {
             }
 
             // إضافة الرسائل الجديدة من الاشتراك
-            return BlocBuilder<SubscribeToMessagesViewModel, SubscribeToMessagesStates>(
+            return BlocBuilder<
+              SubscribeToMessagesViewModel,
+              SubscribeToMessagesStates
+            >(
               builder: (context, newState) {
                 if (newState is SubscribeToMessagesStatesSuccess) {
                   for (var msg in newState.messages) {
@@ -83,7 +89,9 @@ class ChatMessagesList extends StatelessWidget {
                     final message = allMessages[index];
 
                     if (message is PendingMessage) {
-                      print('👻 عرض رسالة مؤقتة: ${message.id} - ${message.type}');
+                      print(
+                        '👻 عرض رسالة مؤقتة: ${message.id} - ${message.type}',
+                      );
                       return PendingMessageWidget(
                         userName: userName,
                         pendingMessage: message,
@@ -92,13 +100,22 @@ class ChatMessagesList extends StatelessWidget {
                             : clientAvatar ?? "",
                       );
                     }
-
-                    // معالجة الرسائل العادية...
                     final msg = message;
                     final isCurrentUser = msg.senderId == currentUserId;
-                    final messageType = _getMessageType(msg.messageType);
-                    final hasAttachment = msg.attachment != null && msg.attachment!.isNotEmpty;
-                    final fileUrl = hasAttachment ? msg.attachment!.first.url : null;
+
+                    // ✅ فك الـ attachment
+                    final attachments = parseAttachments(msg.attachment);
+
+                    // ✅ هات الـ fileUrl الحقيقي
+                    final String? fileUrl = attachments.isNotEmpty
+                        ? attachments.first['url'] as String?
+                        : null;
+
+                    // ✅ حدّد النوع من الامتداد
+                    final messageType = _getMessageType(
+                      msg.messageType,
+                      url: fileUrl,
+                    );
 
                     return _buildMessageWidget(
                       context,
@@ -115,65 +132,66 @@ class ChatMessagesList extends StatelessWidget {
         );
       },
     );
-
   }
 
   // ... باقي الدوال كما هي بدون تغيير
   Widget _buildMessageWidget(
-      BuildContext context, {
-        required dynamic msg,
-        required bool isCurrentUser,
-        required MessagesType messageType,
-        required String? fileUrl,
-      }) {
-    switch (messageType) {
-      case MessagesType.audio when fileUrl != null:
-        return VoiceMessageWidget(
-          userName:  userName,
-          fileUrl: fileUrl,
-          time: _formatTime(msg.createdAt),
-          isCurrentUser: isCurrentUser,
-          avatarUrl: isCurrentUser
-              ? freelancerAvatar ?? ""
-              : clientAvatar ?? "",
-        );
+    BuildContext context, {
+    required dynamic msg,
+    required bool isCurrentUser,
+    required MessagesType messageType,
+    required String? fileUrl,
+  }) {
+    final lower = fileUrl?.toLowerCase() ?? '';
 
-      case MessagesType.file when fileUrl != null:
-        return FileMessageWidget(
-          userName:  userName,
-          fileUrl: fileUrl,
-          time: _formatTime(msg.createdAt),
-          isCurrentUser: isCurrentUser,
-          avatarUrl: isCurrentUser
-              ? freelancerAvatar ?? ""
-              : clientAvatar ?? "",
-        );
+    // 🔥 حارس أمان: الصوت فقط لو الامتداد صوت
+    final isAudioFile =
+        lower.endsWith('.mp3') ||
+        lower.endsWith('.m4a') ||
+        lower.endsWith('.wav') ||
+        lower.endsWith('.aac');
 
-      default:
-        if (_isImageMessage(msg) && fileUrl != null) {
-          return MediaMessageWidget(
-            userName: userName,
-            fileUrl: fileUrl,
-            time: _formatTime(msg.createdAt),
-            isCurrentUser: isCurrentUser,
-            avatarUrl: isCurrentUser
-                ? freelancerAvatar ?? ""
-                : clientAvatar ?? "",
-            caption: msg.content,
-          );
-        } else {
-          return TextMessageBubble(
-            userName:  userName,
-            message: msg.content ?? "",
-            time: _formatTime(msg.createdAt),
-            isCurrentUser: isCurrentUser,
-            avatarUrl: isCurrentUser
-                ? freelancerAvatar ?? ""
-                : clientAvatar ?? "",
-
-          );
-        }
+    if (isAudioFile && fileUrl != null) {
+      return VoiceMessageWidget(
+        userName: userName,
+        fileUrl: fileUrl,
+        time: _formatTime(msg.createdAt),
+        isCurrentUser: isCurrentUser,
+        avatarUrl: isCurrentUser ? freelancerAvatar ?? "" : clientAvatar ?? "",
+      );
     }
+
+    // 🖼 صورة
+    if (messageType == MessagesType.image && fileUrl != null) {
+      return MediaMessageWidget(
+        userName: userName,
+        fileUrl: fileUrl,
+        time: _formatTime(msg.createdAt),
+        isCurrentUser: isCurrentUser,
+        avatarUrl: isCurrentUser ? freelancerAvatar ?? "" : clientAvatar ?? "",
+        caption: msg.content,
+      );
+    }
+
+    // 📄 أي ملف تاني (PDF / Word / Excel)
+    if (fileUrl != null) {
+      return FileMessageWidget(
+        userName: userName,
+        fileUrl: fileUrl,
+        time: _formatTime(msg.createdAt),
+        isCurrentUser: isCurrentUser,
+        avatarUrl: isCurrentUser ? freelancerAvatar ?? "" : clientAvatar ?? "",
+      );
+    }
+
+    // 📝 نص
+    return TextMessageBubble(
+      userName: userName,
+      message: msg.content ?? "",
+      time: _formatTime(msg.createdAt),
+      isCurrentUser: isCurrentUser,
+      avatarUrl: isCurrentUser ? freelancerAvatar ?? "" : clientAvatar ?? "",
+    );
   }
 
   String _formatTime(DateTime dateTime) {
@@ -189,21 +207,53 @@ class ChatMessagesList extends StatelessWidget {
         url.endsWith('.gif');
   }
 
-  MessagesType _getMessageType(String type, {String? url}) {
-    if (type == 'audio') return MessagesType.audio;
-    if (type == 'file') return MessagesType.file;
-    if (type == 'image') return MessagesType.image;
-    if (url != null &&
-        (url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.png') || url.endsWith('.gif'))) {
+  MessagesType _getMessageType(String _, {String? url}) {
+    if (url == null) return MessagesType.text;
+
+    final lower = url.toLowerCase();
+
+    // 🖼 Images
+    if (lower.endsWith('.jpg') ||
+        lower.endsWith('.jpeg') ||
+        lower.endsWith('.png') ||
+        lower.endsWith('.gif')) {
       return MessagesType.image;
     }
-    return MessagesType.text;
+
+    // 🎵 Audio
+    if (lower.endsWith('.mp3') ||
+        lower.endsWith('.m4a') ||
+        lower.endsWith('.wav') ||
+        lower.endsWith('.aac')) {
+      return MessagesType.audio;
+    }
+
+    // 📄 أي ملف تاني (PDF / Word / Excel / PPT)
+    return MessagesType.file;
+  }
+}
+
+enum MessagesType {
+  text, // رسالة نصية
+  audio, // رسالة صوتية
+  file, // ملف (PDF، Word، إلخ)
+  image, // صورة (ممكن تستخدمه مع MediaMessageWidget)
+}
+
+List<dynamic> parseAttachments(dynamic raw) {
+  if (raw == null) return [];
+
+  if (raw is String) {
+    try {
+      return jsonDecode(raw);
+    } catch (_) {
+      return [];
+    }
   }
 
-}
-enum MessagesType {
-  text,   // رسالة نصية
-  audio,  // رسالة صوتية
-  file,   // ملف (PDF، Word، إلخ)
-  image,  // صورة (ممكن تستخدمه مع MediaMessageWidget)
+  if (raw is List) {
+    return raw;
+  }
+
+  return [];
 }

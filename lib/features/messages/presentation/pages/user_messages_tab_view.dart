@@ -19,36 +19,52 @@ class UserMessagesTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final local =AppLocalizations.of(context)!;
+    return BlocProvider(
+      create: (_) => getIt<UnreadMessagesBadgeViewModel>(),
+      child: _UserMessagesTabViewContent(),
+    );
+  }
+}
+
+class _UserMessagesTabViewContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final local = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar:  CustomAppBar(
+      appBar: CustomAppBar(
         title: local.messages,
         image: Assets.assetsImagesChat6431892,
       ),
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          children: [
-            GestureDetector(
-                onTap: () {
-                  Navigator.pushNamed(context, RoutesManager.adminChatView,
-                      arguments: {
-                        "currentUserId":
-                            SharedPrefHelper.getString(StringsManager.idKey),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () async {
+                  await Navigator.pushNamed(
+                    context,
+                    RoutesManager.adminChatView,
+                    arguments: {
+                      "currentUserId": SharedPrefHelper.getString(
+                        StringsManager.idKey,
+                      ),
+                    },
+                  );
 
 
-                      });
                 },
-                child: const AdminConversationCard()),
-            MultiBlocProvider(
-                providers: [
-                  BlocProvider(create: (context) => getIt<MessagesViewModel>()),
-                  BlocProvider(create: (context) => getIt<UnreadMessagesBadgeViewModel>()),
-                ],
-                child: const UserMessagesTabViewBody()),
-          ],
+                child: const AdminConversationCard(),
+              ),
+
+              BlocProvider(
+                create: (_) => getIt<MessagesViewModel>(),
+                child: const UserMessagesTabViewBody(),
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }

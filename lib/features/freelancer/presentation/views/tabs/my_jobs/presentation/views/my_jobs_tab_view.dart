@@ -76,8 +76,8 @@ class _FreelancerMyJobsTabViewState extends State<FreelancerMyJobsTabView> {
                         case "accepted":
                           badgeCounts["accepted"] = (badgeCounts["accepted"] ?? 0) + 1;
                           break;
-                        case "completed":
-                          badgeCounts["completed"] = (badgeCounts["completed"] ?? 0) + 1;
+                        case "Completed":
+                          badgeCounts["Completed"] = (badgeCounts["Completed"] ?? 0) + 1;
                           break;
                         case "rejected":
                           badgeCounts["rejected"] = (badgeCounts["rejected"] ?? 0) + 1;
@@ -98,7 +98,7 @@ class _FreelancerMyJobsTabViewState extends State<FreelancerMyJobsTabView> {
                     numbers: [
                       badgeCounts["pending"] ?? 0,
                       badgeCounts["accepted"] ?? 0,
-                      badgeCounts["completed"] ?? 0,
+                      badgeCounts["Completed"] ?? 0,
                       badgeCounts["rejected"] ?? 0,
                     ],
                   );

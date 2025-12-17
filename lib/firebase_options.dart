@@ -41,48 +41,49 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDg8kqkNvsVtkMgAqCAVl43owZRT5NZ3Yg',
-    appId: '1:1016757516301:web:8f7ab3a961ff573f547d44',
-    messagingSenderId: '1016757516301',
-    projectId: 'taskly-c395b',
-    authDomain: 'taskly-c395b.firebaseapp.com',
-    storageBucket: 'taskly-c395b.firebasestorage.app',
-    measurementId: 'G-XSPDGSVYP5',
+    apiKey: 'AIzaSyCuZrHbSGXG1s19Wo9hfs0gWGgctygf5BU',
+    appId: '1:800591543684:web:99afbf481999d44dc4b1d1',
+    messagingSenderId: '800591543684',
+    projectId: 'moglance',
+    authDomain: 'moglance.firebaseapp.com',
+    storageBucket: 'moglance.firebasestorage.app',
+    measurementId: 'G-J86RKJV0BJ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCJbtevh1aqhJ0uAiDW_prWbnrHtwpJSAA',
-    appId: '1:1016757516301:android:f2c5f0310ffa1e56547d44',
-    messagingSenderId: '1016757516301',
-    projectId: 'taskly-c395b',
-    storageBucket: 'taskly-c395b.firebasestorage.app',
+    apiKey: 'AIzaSyAkbYZ2ZxAAxsL6kJwhZi-RmOspuNsyUzA',
+    appId: '1:800591543684:android:3b0487f198d7a2c2c4b1d1',
+    messagingSenderId: '800591543684',
+    projectId: 'moglance',
+    storageBucket: 'moglance.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD7sAZZDXiO1xpbqY2PxUzl3p7t653cEOs',
-    appId: '1:1016757516301:ios:771d05f0108526f2547d44',
-    messagingSenderId: '1016757516301',
-    projectId: 'taskly-c395b',
-    storageBucket: 'taskly-c395b.firebasestorage.app',
+    apiKey: 'AIzaSyBc2U6lwz2M6SDguVaPTcqMKHWWEq2GdLU',
+    appId: '1:800591543684:ios:147c38be7a7d524ec4b1d1',
+    messagingSenderId: '800591543684',
+    projectId: 'moglance',
+    storageBucket: 'moglance.firebasestorage.app',
     iosBundleId: 'com.example.taskly',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD7sAZZDXiO1xpbqY2PxUzl3p7t653cEOs',
-    appId: '1:1016757516301:ios:771d05f0108526f2547d44',
-    messagingSenderId: '1016757516301',
-    projectId: 'taskly-c395b',
-    storageBucket: 'taskly-c395b.firebasestorage.app',
+    apiKey: 'AIzaSyBc2U6lwz2M6SDguVaPTcqMKHWWEq2GdLU',
+    appId: '1:800591543684:ios:147c38be7a7d524ec4b1d1',
+    messagingSenderId: '800591543684',
+    projectId: 'moglance',
+    storageBucket: 'moglance.firebasestorage.app',
     iosBundleId: 'com.example.taskly',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDg8kqkNvsVtkMgAqCAVl43owZRT5NZ3Yg',
-    appId: '1:1016757516301:web:ac2d00c2f2262ff3547d44',
-    messagingSenderId: '1016757516301',
-    projectId: 'taskly-c395b',
-    authDomain: 'taskly-c395b.firebaseapp.com',
-    storageBucket: 'taskly-c395b.firebasestorage.app',
-    measurementId: 'G-CDHZTECZT6',
+    apiKey: 'AIzaSyCuZrHbSGXG1s19Wo9hfs0gWGgctygf5BU',
+    appId: '1:800591543684:web:44a7598eba02a601c4b1d1',
+    messagingSenderId: '800591543684',
+    projectId: 'moglance',
+    authDomain: 'moglance.firebaseapp.com',
+    storageBucket: 'moglance.firebasestorage.app',
+    measurementId: 'G-PJPG35FW3N',
   );
+
 }

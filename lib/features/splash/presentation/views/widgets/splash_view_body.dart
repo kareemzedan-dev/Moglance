@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:taskly/core/utils/assets_manager.dart';
 
 import '../../../../../config/routes/routes_manager.dart';
@@ -129,10 +130,10 @@ class _SplashViewBodyState extends State<SplashViewBody>
                 ),
               );
             },
-            child: Image.asset(
+            child: SvgPicture.asset(
               Assets.fishing_tool,
-              width: 400.w,
-              height: 400.w,
+              width: 500.w,
+              height: 500.w,
             ),
           ),
 
@@ -148,10 +149,10 @@ class _SplashViewBodyState extends State<SplashViewBody>
                 ),
               );
             },
-            child: Image.asset(
+            child: SvgPicture.asset(
               Assets.bag,
-              width: 400.w,
-              height: 400.w,
+              width: 500.w,
+              height: 500.w,
             ),
           ),
 
@@ -167,10 +168,10 @@ class _SplashViewBodyState extends State<SplashViewBody>
                 ),
               );
             },
-            child: Image.asset(
+            child: SvgPicture.asset(
               Assets.name,
-              width: 300.w,
-              height: 300.w,
+              width: 400.w,
+              height: 400.w,
             ),
           ),
         ],

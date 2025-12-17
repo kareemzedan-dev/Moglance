@@ -33,7 +33,6 @@ class _OrderViewBodyState extends State<OrderViewBody> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-
     // Initialize only once
     if (timeUnits.isEmpty) {
       viewModel = context.read<PlaceOrderViewModel>();
@@ -45,7 +44,6 @@ class _OrderViewBodyState extends State<OrderViewBody> {
         timeUnits: timeUnits,
       );
     }
-
   }
 
   @override
@@ -56,14 +54,24 @@ class _OrderViewBodyState extends State<OrderViewBody> {
     return BlocConsumer<PlaceOrderViewModel, PlaceOrderViewModelStates>(
       listener: (context, state) {
         if (state is PlaceOrderViewModelStatesSuccess) {
-          showTemporaryMessage(context, local.order_created_success, MessageType.success);
+          showTemporaryMessage(
+            context,
+            local.order_created_success,
+            MessageType.success,
+          );
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (_) => const ClientHomeView(initialIndex: 1)),
-                (_) => false,
+            MaterialPageRoute(
+              builder: (_) => const ClientHomeView(initialIndex: 1),
+            ),
+            (_) => false,
           );
         } else if (state is PlaceOrderViewModelStatesError) {
-          showTemporaryMessage(context, state.message ?? local.somethingWentWrong, MessageType.error);
+          showTemporaryMessage(
+            context,
+            state.message ?? local.somethingWentWrong,
+            MessageType.error,
+          );
         }
       },
       builder: (context, state) {

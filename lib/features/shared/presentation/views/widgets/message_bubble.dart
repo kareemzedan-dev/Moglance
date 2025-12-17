@@ -14,7 +14,7 @@ class MessageBubble extends StatelessWidget {
   final bool chatWithUsers;
   final String userName;
   final bool isSent;
-  final DateTime? seenAt; // جديد
+  final DateTime? seenAt;
 
   const MessageBubble({
     super.key,
@@ -32,10 +32,8 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final isClient = sender == SenderType.client;
 
-    // لون الفقاعة ثابت
     Color bubbleColor = isClient ? Colors.grey.shade300 : ColorsManager.primary;
 
-    // حالة العلامة
     IconData statusIcon = Icons.check;
     Color iconColor = Colors.white;
 

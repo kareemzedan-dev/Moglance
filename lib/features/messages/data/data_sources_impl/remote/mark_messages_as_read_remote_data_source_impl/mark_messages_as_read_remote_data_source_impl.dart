@@ -37,4 +37,29 @@ class MarkMessagesAsReadRemoteDataSourceImpl extends MarkMessagesAsReadRemoteDat
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failures, void>> markAdminMessagesAsRead(
+      String currentUserId) async {
+    try {
+      if (!await NetworkUtils.hasInternet()) {
+        return const Left(NetworkFailure('تحقق من اتصالك بالانترنت'));
+      }
+
+      await supabaseService.supabaseClient
+          .from('messages')
+          .update({
+        'seen_at': DateTime.now().toIso8601String(),
+      })
+          .eq('receiver_id', currentUserId)
+          .eq('sender_type', 'admin')
+          .filter('seen_at', 'is', null);
+
+      return const Right(null);
+    } on PostgrestException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

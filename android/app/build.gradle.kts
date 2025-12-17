@@ -1,5 +1,8 @@
 plugins {
     id("com.android.application")
+    // START: FlutterFire Configuration
+    id("com.google.gms.google-services")
+    // END: FlutterFire Configuration
     id("kotlin-android")
     id("dev.flutter.flutter-gradle-plugin")
 }
@@ -19,19 +22,24 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    defaultConfig {
-        applicationId = "com.example.taskly"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
-    }
+   defaultConfig {
+    applicationId = "com.example.taskly"
+
+    minSdk = flutter.minSdkVersion        
+    targetSdk = 34
+
+    versionCode = 1
+    versionName = "1.0"
+}
+
 
     buildTypes {
         getByName("release") {
-            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
+
 }
 
 flutter {

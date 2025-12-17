@@ -86,6 +86,12 @@ class UnreadMessagesBadgeViewModel extends Cubit<UnreadMessagesBadgeState> {
       emit(UnreadMessagesBadgeUpdated(Map.from(_unreadCounts)));
     }
   }
+    String adminConversationKey = 'admin';
+
+  void markAdminAsRead() {
+    _unreadCounts[adminConversationKey] = 0;
+    emit(UnreadMessagesBadgeUpdated(Map.from(_unreadCounts)));
+  }
 
   @override
   Future<void> close() async {
@@ -95,4 +101,6 @@ class UnreadMessagesBadgeViewModel extends Cubit<UnreadMessagesBadgeState> {
     await _globalSubscription?.cancel();
     return super.close();
   }
+
+
 }

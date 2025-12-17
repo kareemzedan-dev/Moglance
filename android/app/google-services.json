@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1016757516301",
-    "project_id": "taskly-c395b",
-    "storage_bucket": "taskly-c395b.firebasestorage.app"
+    "project_number": "800591543684",
+    "project_id": "moglance",
+    "storage_bucket": "moglance.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1016757516301:android:f2c5f0310ffa1e56547d44",
+        "mobilesdk_app_id": "1:800591543684:android:3b0487f198d7a2c2c4b1d1",
         "android_client_info": {
           "package_name": "com.example.taskly"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCJbtevh1aqhJ0uAiDW_prWbnrHtwpJSAA"
+          "current_key": "AIzaSyAkbYZ2ZxAAxsL6kJwhZi-RmOspuNsyUzA"
         }
       ],
       "services": {
